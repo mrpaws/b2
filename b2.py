@@ -2,20 +2,77 @@
 
 import sys
 import argparse
+from types import IntType
 
-class Translator():
-   pass
+class B2Exception(Exception):
+    '''pass generic b2 module exceptions
+    '''
+    pass
 
-def read_stdin():
-    product=""
-    for line in sys.stdin:
-        product = "{p}{l}".format(
-            p = product, 
-            l = line
-            )
-    return product[:-1]
+class Translator:
+    '''b2 translator object'''
+    def __init__(self, value):    
+        self.value = value
+        #assert(type(self.value)) is IntType, "{m}{v}".format(
+            #m="value is not an number: ",
+            #v=value
+            #)
+        self.str_value = self._conv_str()
+        self.base = self._identify_base()
+        self._translate_binary()
+
+    def _conv_str(self):
+        '''private method to convert int to string 
+           for digit manipulation for bitwise calculations
+        '''
+        try: 
+            str_value = str(self.value)
+        except(ValueError):
+            error = "Unable to manipulate value as a string: ({v}).".format(
+                v=value
+                )
+            raise B2Exception(error)
+            return False
+        return str_value
+
+
+    def _identify_base(self):
+        '''private method to identify base of input (10 or 2)
+        '''
+        base = 2
+        '''try to guess whether input is a decimal of binary
+           ideally user should specify
+        '''
+        for c in self.str_value:
+            if int(c) > 1:
+                base = 10
+                break
+        return base
+    
+    def _translate_binary(self):
+        '''private method to translate a binary to a decimal
+        '''
+        product = 0
+        i = 0
+        numlen = len(self.str_value)
+        exp = numlen-1 
+        while (i < numlen):
+            #print self.str_value[i-1]
+            bit = int(self.str_value[i])
+            '''formula =  (bit * base ^ exp)
+            '''
+            bit_decval = bit*self.base**exp
+            product = product + bit_decval
+            i=i+1
+            exp = exp - 1
+        print product
+          
+
+          
 
 def manage_cli_args():
+    '''parse command line arguments/stdin
+    '''
     parser = argparse.ArgumentParser(
         description="Translate base2 & base10",
         usage = "%(prog)s <number> [-hv]"
@@ -38,8 +95,10 @@ def manage_cli_args():
 
     verbosity = args.verbose
     uinput = args.number
-    verbosity = args.verbose
 
+    ''' Python documentation pushes argparse but this
+        hack would not be necessary with getopt
+    '''
     uinput_type = type(uinput)
     if uinput_type is file:
         uinput = sys.stdin.read()[:-1]
@@ -54,8 +113,10 @@ def manage_cli_args():
     return [verbosity,uinput]
 
 def main():
-    verbosity,uninput = manage_cli_args()
-        
+    '''MAIN Main main
+    '''
+    verbosity,uinput = manage_cli_args()
+    translation = Translator(uinput)
 
 if __name__ == '__main__':
     main()
