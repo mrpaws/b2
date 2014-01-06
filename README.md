@@ -17,11 +17,11 @@ Features:
 
 Use cases: 
 
-binary => decimal
+- binary => decimal
 $ python b2.py 100010101101
 2221
 
-decimal => binary, with input from a pipe
+- decimal => binary, with input from a pipe
 $ echo "50000120013132" | python b2.py 
 1011010111100110001111011001000110000101001100
 
