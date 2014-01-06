@@ -1,4 +1,11 @@
 #!/usr/bin/env python
+'''
+  b2.py - translate decimal and binary
+  Author:
+      mrpaws
+  Project Repo:
+      https://github.com/mrpaws/b2
+'''
 
 import sys
 import argparse
@@ -19,7 +26,7 @@ class Translator:
             #)
         self.str_value = self._conv_str()
         self.base = self._identify_base()
-        self._translate_binary()
+        self.translation = None
 
     def _conv_str(self):
         '''private method to convert int to string 
@@ -34,7 +41,6 @@ class Translator:
             raise B2Exception(error)
             return False
         return str_value
-
 
     def _identify_base(self):
         '''private method to identify base of input (10 or 2)
@@ -57,18 +63,33 @@ class Translator:
         numlen = len(self.str_value)
         exp = numlen-1 
         while (i < numlen):
-            #print self.str_value[i-1]
             bit = int(self.str_value[i])
-            '''formula =  (bit * base ^ exp)
-            '''
             bit_decval = bit*self.base**exp
             product = product + bit_decval
             i=i+1
             exp = exp - 1
-        print product
-          
+        return str(product)
 
-          
+    def _translate_decimal(self):
+        '''private method to translate a decimal to a binary
+        '''
+        c_value = self.value
+        bits = []
+        while (c_value != 0): 
+            bits.append(c_value % 2)
+            c_value = c_value / 2
+        bits.reverse()
+        return ''.join(map(str, bits))
+
+    def translate(self):
+        '''perform translations and return the result to the user'''
+        if self.base == 2:
+            self.translation = self._translate_binary()
+        elif self.base == 10:
+            self.translation = self._translate_decimal()
+        return self.translation
+
+        
 
 def manage_cli_args():
     '''parse command line arguments/stdin
@@ -116,7 +137,13 @@ def main():
     '''MAIN Main main
     '''
     verbosity,uinput = manage_cli_args()
-    translation = Translator(uinput)
+    try:
+        translation = Translator(uinput)
+        value = translation.translate()
+    except(B2Exception) as errormsg:
+        print errormsg
+        sys.exit(2)
+    print value
 
 if __name__ == '__main__':
     main()
