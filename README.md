@@ -3,11 +3,17 @@ b2
 
 translates binary and decimal (base 2 &lt;=> base 10)
 
+Note if you're just looking for a simple way to translate, you should see this:
+
+Python has a built-in function bin that displays the binary representation of a decimal number, and will directly  translate a series of bits to a decimal when using bit format: 0b110 = 6
+
+This project is a learning project to actually toy with the logic and handle the conversion manually. 
+
 
 
 Summary:
 
-A useful learning project.
+A (useful?) learning project.
 
 Under development but functionally sound, this program will convert base 2 to base 10 and vice versa.  Verbose output does not work yet but ideally will show the math involved in the conversion process.
 
@@ -16,6 +22,7 @@ Features:
 -  reusable code
 -  tries to determine what you're passing it
 -  accepts input from stdin (via a pipe or interactively) and cli
+
 
 Use cases: 
 
@@ -38,6 +45,8 @@ TODO:
 -  possibly ditch argparse
 
 Development Notes:
+
+- Python has a built-in function bin that displays the binary representation of a decimal number, and will directly  translate a series of bits to a decimal when using bit format: 0b110 = 6
 
 This is another learning project with some good takeaways:
 
